@@ -3,7 +3,10 @@ from functools import *
 from re import *
 #калькулятор
 
-dict = [')', '*', '%', '/', '+', '-']
+
+dict = ['*', '%', '/', '+', '-']
+pref = ['+', '-']
+borders = ['(', ')']
 prioret = {'0':['(', ')'], '1':['+', '-'], '2':['*', '/', '%']}
 
 
@@ -14,52 +17,32 @@ def find(op):
 
 
 def sort_1(c):
-    s = c.replace(' ', '')
-    res = ['']
+    s = '+'+c.replace(' ', '')
+    res = []
     n = ''
-    for i in s:
-        if i in dict:
-            if n=='' and res[-1]!=')':
-                n+=i
-            else:
-                if n!='':
-                    res.append(int(n))
-                n = ''
-                res.append(i)
-        elif i in ['(', ')']:
-            res.append(i)
+    for i in range(1, len(s)):
+        if s[i] not in dict+borders or (s[i-1] in dict and s[i] in pref):
+            n += s[i]
         else:
-            n+=i
-    if n != '':
-        res.append(int(n))
+            if n!='':
+                res.append(float(n))
+            res.append(s[i])
+            n=''
+    if n!= '':
+        res.append(float(n))
     res = ['('] + res + [')']
-    res.remove('')
+    print(res)
     return res
 
 
 def box(m):
-    in_borders = []
-    out = []
-    inside=True
-    for x in m:
-        if x == ')':
-            inside=False
-            out.append(')')
-        elif x == '(':
-            out = out + in_borders + ['(']
-            in_borders = []
-        elif inside:
-            in_borders.append(x)
+    res = []
+    for x in reversed(m):
+        if x != '(':
+            res.append(x)
         else:
-            out.append(x)
-    print('Box:', in_borders, out)
-    for i in range(0, len(out)):
-        if out[i] == '(' and out[i+1] == ')':
-            for x in range(0, 1): out.pop(i)
-            out.pop(i)
             break
-    print('Box:', in_borders, out)
-    return [in_borders, out]
+    return res
 
 
 def sort_station(s):
@@ -70,7 +53,7 @@ def sort_station(s):
         if el == '(':
             steck.append(el)
         elif el == ')':
-            for x in reversed(box(steck)[0]):
+            for x in box(steck):
                 res.append(x)
                 steck.pop()
             steck.pop()
@@ -84,6 +67,7 @@ def sort_station(s):
         else:
             res.append(el)
     steck.reverse()
+    res += steck
     print(res)
     return res
 
@@ -100,30 +84,6 @@ def calc(s_detl):
                 s = s[0:i-2]+[math[s[i]]([s[i-2], s[i-1]])]+s[i+1:len(s)]
                 break
     return s[0]
-
-@lru_cache(0)
-def sort_station_recursion(exp, start):  # exp это маcсив, ограниченный () с двух сторон
-    print(exp, start)
-    steck = []
-    rs = start
-    in_borders, out = box(exp)
-    for el in in_borders:
-        if el in dict:
-            while True:
-                if len(steck) == 0 or find(el) > find(steck[-1]):
-                    steck.append(el)
-                    break
-                else:
-                    rs.append(steck.pop())
-        else:
-            rs.append(el)
-    steck.reverse()
-    rs += steck
-    print('Recursion', rs, out)
-    if len(out) > 0:
-        return sort_station_recursion(out, rs)
-    else:
-        return rs
 
 
 async def main():
