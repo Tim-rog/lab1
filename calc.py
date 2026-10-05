@@ -1,6 +1,7 @@
 import asyncio
 from functools import *
 from re import *
+from values import translate
 #калькулятор
 
 
@@ -25,11 +26,11 @@ def sort_1(c):
             n += s[i]
         else:
             if n!='':
-                res.append(float(n))
+                res.append(float(translate(n)))
             res.append(s[i])
             n=''
     if n!= '':
-        res.append(float(n))
+        res.append(float(translate(n)))
     res = ['('] + res + [')']
     print(res)
     return res
@@ -80,8 +81,9 @@ def calc(s_detl):
     s = s_detl
     while len(s)>1:
         for i in range(0, len(s)):
-            if s[i] in dict:
-                s = s[0:i-2]+[math[s[i]]([s[i-2], s[i-1]])]+s[i+1:len(s)]
+            if s[i] in dict:                                              #если встречает оператор
+                s = s[0:i-2]+[math[s[i]]([s[i-2], s[i-1]])]+s[i+1:len(s)] #берёт всё содержимое массива до оператора и двух операндов,
+                                                                        # складывает с [результатт операции на двух ближайших опернадах] и с оставишмя массиавом
                 break
     return s[0]
 
