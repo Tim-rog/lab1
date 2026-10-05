@@ -1,6 +1,7 @@
 columns = ['length', 'weight', 'tempeture']
 
 dictionary = {'k':1000, 'm':1/1000, 's':1}
+dict_temp = {'k'}
 
 
 def translate(f, code='st'):

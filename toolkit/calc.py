@@ -88,12 +88,6 @@ def calc(s_detl):
     return s[0]
 
 
-async def main():
-    ex = input('new calculation:')
-    res = sort_station(ex)
-    print(calc(res))
-
-
-while True:
-    if __name__ == "__main__":
-        asyncio.run(main())
+def calculate(ex: str) -> float:
+    res = sort_station(sort_1(ex))
+    return calc(res)
