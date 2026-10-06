@@ -1,7 +1,7 @@
 import asyncio
 from functools import *
 from re import *
-from values import translate
+from .values import translate
 #калькулятор
 
 
@@ -11,6 +11,7 @@ borders = ['(', ')']
 prioret = {'0':['(', ')'], '1':['+', '-'], '2':['*', '/', '%']}
 
 
+#определяет приорететность оператора
 def find(op):
     for i in range(0, 3):
         if op in prioret[f'{i}']:
@@ -18,6 +19,10 @@ def find(op):
 
 
 def sort_1(c):
+    '''
+    :param c: строка
+    :return: массив, содержащий float(операнды) и str(операторы)
+    '''
     s = '+'+c.replace(' ', '')
     res = []
     n = ''
@@ -26,16 +31,16 @@ def sort_1(c):
             n += s[i]
         else:
             if n!='':
-                res.append(float(translate(n)))
+                res.append(translate(n))
             res.append(s[i])
             n=''
     if n!= '':
-        res.append(float(translate(n)))
+        res.append(translate(n))
     res = ['('] + res + [')']
-    print(res)
     return res
 
 
+#принимает массив, на выход отдаёт массив, состоящий из содержимого самых внутренних скобок
 def box(m):
     res = []
     for x in reversed(m):
@@ -47,6 +52,11 @@ def box(m):
 
 
 def sort_station(s):
+    '''
+    функция, вдохновлённая сортировочной станцией Дейтла, использует те же принципы
+    :param s: массив из операторов и операндов
+    :return:  массив в посфтиксном формате
+    '''
     c = sort_1(s)
     steck = []
     res = []
@@ -69,15 +79,18 @@ def sort_station(s):
             res.append(el)
     steck.reverse()
     res += steck
-    print(res)
     return res
 
 
+#словарь с функциеями
 math = {'*':lambda ex: ex[0]*ex[1], '+':lambda ex: ex[0]+ex[1], '/':lambda ex: ex[0]/ex[1],
         '-': lambda ex: ex[0]-ex[1], '%':lambda ex: ex[0]%ex[1]}
 
 
 def calc(s_detl):
+    '''вычеслитель
+     принимает массив в посфтиксном формате
+     возвращает результат float'''
     s = s_detl
     while len(s)>1:
         for i in range(0, len(s)):
@@ -89,5 +102,6 @@ def calc(s_detl):
 
 
 def calculate(ex: str) -> float:
-    res = sort_station(sort_1(ex))
+    '''Удобный запуск'''
+    res = sort_station(ex)
     return calc(res)
