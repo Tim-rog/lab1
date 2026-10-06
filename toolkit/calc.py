@@ -1,6 +1,3 @@
-import asyncio
-from functools import *
-from re import *
 from .values import translate
 #калькулятор
 
@@ -31,11 +28,11 @@ def sort_1(c):
             n += s[i]
         else:
             if n!='':
-                res.append(translate(n))
+                res.append(float(translate(n)))
             res.append(s[i])
             n=''
     if n!= '':
-        res.append(translate(n))
+        res.append(float(translate(n)))
     res = ['('] + res + [')']
     return res
 

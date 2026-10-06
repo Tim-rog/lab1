@@ -40,5 +40,4 @@ def main():
 
     if args.command == "convert":
         result = translate(args.value+args.from_unit, args.to_unit)
-        print(args.value+args.from_unit, args.to_unit)
         print(result)

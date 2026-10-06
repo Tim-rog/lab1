@@ -1,32 +1,55 @@
-dictionary = {'k':1000, 'm':1/1000, 'c':1/100, 's':1}
-dict_temp = {'K':lambda x: x-273.15, 'F': lambda x: (x-32)*5/9, 'st': lambda x: x, 'C':lambda x: x,
-             '1/K':lambda x: x+273.15, '1/F': lambda x: x*9/5-32, '1/st': lambda x: x}
+dictionary = {'k':1000, 'm':1/1000, 'c':1/100, '':1}
+dict_temp = {'k':lambda x: x-273.15, 'f': lambda x: (x-32)*5/9, '': lambda x: x, 'c':lambda x: x,
+             '1/k':lambda x: x+273.15, '1/f': lambda x: x*9/5+32, '1/': lambda x: x, '1/c':lambda x: x}
 
 
-
-def translate(f:str, code='st')->float:
+def translate(f:str, code='st')->str:
         '''
         перевод в станлурнтную, либо заданную сичтему счислений, если на вход поданно просто число, возвращает просто число
         :param f: строка с числом
         :param code: куда переводить
         :return: переведённое число
         '''
-        if all([(x in '+-0123456789.') for x in f]):
-                return float(f)
-        elif code[-1] != f[-1] and any([(x not in dict_temp.keys()) for x in [code[-1], f[-1]]]) and code!='st':
-                return 'Нельза переводить разные физические велечины'
-        if (len(code) < 2 and code.upper() != code) or code=='C':
-                code = 'st'
-        if f[-2] in '+-0123456789.' and f[-1] not in '+-0123456789.' and f[-1].upper()!=f[-1]:
-                f = f[:-1]+f's{f[-1]}'
+        f = f.lower().replace(' ', '')
+        code = code.lower().replace(' ', '')
         num = ''
-        for i in f:
-                if i not in '+-0123456789.':
-                        if i in dictionary.keys():
-                                return float(num)*dictionary[i]/dictionary[code[0]]
-                        elif i in dict_temp.keys():
-                                if dict_temp['1/K'](dict_temp[i](float(num))) < 0:
-                                        return 'Значение ниже абсолютного нуля'
-                                return dict_temp[f'1/{code}'](dict_temp[i](float(num)))
+        val = ''
+        for x in f:
+                nums = True
+                if x in '+-0123456789.':
+                        if not nums:
+                                return 'Неправильнный ввод переводимого'
+                        num += x
                 else:
-                        num += i
+                        nums = False
+                        val += x
+
+        if val == '':
+                return num
+        if code == 'st':
+                code=val[-1]
+        if val == code:
+                return num
+
+        cd = ''
+        cd_val = ''
+        for x in code:
+                if cd+x not in dictionary:
+                        break
+                cd+=x
+        for x in val:
+                if cd_val+x not in dictionary:
+                        break
+                cd_val+=x
+        cd = cd.replace(code,'')
+        cd_val = cd_val.replace(val, '')
+        print(cd, code, cd_val, val)
+        if val.replace(cd_val, '', 1) != code.replace(cd, '', 1) and not (code[-1] in dict_temp and val[-1] in dict_temp):
+                return 'Нельза переводить разные физические велечины'
+
+        if code in dict_temp and val in dict_temp:
+                if dict_temp['1/k'](dict_temp[cd_val](float(num))) == 0:
+                        return 'Температура ниже абсолютного нуля'
+                return str(dict_temp[f'1/{code}'](dict_temp[val](float(num))))
+        else:
+                return str(dictionary[cd_val]*float(num)/dictionary[cd])
