@@ -22,17 +22,23 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == "calc":
-        try:
+    try:
+        if args.command == "calc":
             result = sort_station(args.expression)
-        except:
-            print()
-        print(' '.join(map(str, result)))
-    elif args.command == "calc=":
-        result = calculate(args.expression)
-        print(result)
+            print(' '.join(map(str, result)))
 
-    elif args.command == "convert":
+        elif args.command == "calc=":
+            result = calculate(args.expression)
+            print(result)
+
+    except ZeroDivisionError:
+        print("Попытка деления на ноль")
+    except (ValueError, TypeError):
+        print("Неправильный ввод")
+    except Exception as e:
+        print(f"Ошибка: {e}")
+
+    if args.command == "convert":
         result = translate(args.value+args.from_unit, args.to_unit)
         print(args.value+args.from_unit, args.to_unit)
         print(result)

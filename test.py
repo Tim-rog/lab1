@@ -7,4 +7,5 @@ def test_plus():
 
 
 def test_pizdec():
-    assert  calculate('(12+8)*3-40/5+2') == 54
+    assert calculate('(12+8)*3-40/5+2') == 54
+

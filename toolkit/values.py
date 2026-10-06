@@ -13,6 +13,8 @@ def translate(f:str, code='st')->float:
         '''
         if all([(x in '+-0123456789') for x in f]):
                 return float(f)
+        elif code[-1] != f[-1]:
+                return 'Нельза переводить разные физические велечины'
         if (len(code) < 2 and code.upper() != code) or code=='C':
                 code = 'st'
         if f[-2] in '+-0123456789' and f[-1] not in '+-0123456789' and f[-1].upper()!=f[-1]:
