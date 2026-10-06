@@ -20,7 +20,7 @@
 ## Установка
 
 ```bash
-git clone https://github.com/timon-rogachik/lab1.git
+git clone https://github.com/Tim-rog/lab1.git
 cd lab1
 python -m venv venv
 venv\Scripts\activate
