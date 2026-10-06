@@ -25,6 +25,8 @@ def translate(f:str, code='st')->float:
                         if i in dictionary.keys():
                                 return float(num)*dictionary[i]/dictionary[code[0]]
                         elif i in dict_temp.keys():
+                                if dict_temp['1/K'](dict_temp[i](float(num))) < 0:
+                                        return 'Значение ниже абсолютного нуля'
                                 return dict_temp[f'1/{code}'](dict_temp[i](float(num)))
                 else:
                         num += i

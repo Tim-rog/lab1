@@ -5,7 +5,12 @@ from toolkit.values import translate
 
 def test_plus():
     assert calculate('2+2') == 4
+    assert calculate('5+5+13342+53') == 13405
 
+def test_minus():
+    assert calculate(' -2 + -3 + -56') == -61
+    assert calculate('-23--46-5') == 18
+    assert calculate('-435*-0.5') == 217.5
 
 def test_pizdec():
     assert calculate('(12+8)*3-40/5+2') == 54
