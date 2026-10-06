@@ -11,17 +11,17 @@ def translate(f:str, code='st')->float:
         :param code: куда переводить
         :return: переведённое число
         '''
-        if all([(x in '+-0123456789') for x in f]):
+        if all([(x in '+-0123456789.') for x in f]):
                 return float(f)
         elif code[-1] != f[-1] and any([(x not in dict_temp.keys()) for x in [code[-1], f[-1]]]) and code!='st':
                 return 'Нельза переводить разные физические велечины'
         if (len(code) < 2 and code.upper() != code) or code=='C':
                 code = 'st'
-        if f[-2] in '+-0123456789' and f[-1] not in '+-0123456789' and f[-1].upper()!=f[-1]:
+        if f[-2] in '+-0123456789.' and f[-1] not in '+-0123456789.' and f[-1].upper()!=f[-1]:
                 f = f[:-1]+f's{f[-1]}'
         num = ''
         for i in f:
-                if i not in '+-0123456789':
+                if i not in '+-0123456789.':
                         if i in dictionary.keys():
                                 return float(num)*dictionary[i]/dictionary[code[0]]
                         elif i in dict_temp.keys():
